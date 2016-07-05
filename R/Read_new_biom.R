@@ -6,6 +6,10 @@
 library(rhdf5)
 library(biom)
 
+
+
+#' @export
+
 # This generates the matrix columns-wise
 generate_matrix <- function(x){
   require(rhdf5)
@@ -28,6 +32,8 @@ generate_matrix <- function(x){
     counts[i,]
   })
 }
+
+
 generate_metadata <- function(x){
   metadata = x$metadata
   metadata = lapply(1:length(x$ids),function(i){
@@ -39,6 +45,7 @@ generate_metadata <- function(x){
   })
   return(metadata)
 }
+
 namedList <- function(...) {
   L <- list(...)
   snm <- sapply(substitute(list(...)),deparse)[-1]
@@ -46,6 +53,7 @@ namedList <- function(...) {
   if (any(nonames <- nm=="")) nm[nonames] <- snm[nonames]
   setNames(L,nm)
 }
+
 
 read_hdf5_biom<-function(file_input){
   x = h5read(file_input,"/",read.attributes = TRUE)
@@ -72,7 +80,7 @@ read_hdf5_biom<-function(file_input){
 
 
 ########################
-
+#' @export
 # i=input .biom file, o=output .txt file
 new_biom_to_otu <- function(i,o) {
   x = read_hdf5_biom(i)

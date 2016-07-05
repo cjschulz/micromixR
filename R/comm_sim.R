@@ -1,5 +1,5 @@
 ### microbial community simulator
-
+#' @export
 trim_otus <- function (x){
   x[ rowSums(x)!=0, colSums(x)!=0 ]
   x[ ,colSums(x==0) <= nrow(x)-2]
@@ -7,6 +7,7 @@ trim_otus <- function (x){
 
 
 ###need method to handle zeros in colSums###
+#' @export
 
 fit_comm <- function(x, normalize=T) {
   mat <- x
@@ -27,6 +28,8 @@ fit_comm <- function(x, normalize=T) {
   res <- list(norm_otus, fitNB_x, fitPois_x, fitLN_x, fitDM_x, fitCLR_x)
   return(res)
 }
+
+#' @export
 
 AIC.fit_comm <- function(x){
   dat = x
@@ -63,6 +66,8 @@ AIC.fit_comm <- function(x){
 # }
 
 
+#' @export
+
 fitNB.mme <- function(x) {
   x[ rowSums(x)!=0, colSums(x)!=0 ]
   fitneg <- function(x) {
@@ -73,6 +78,9 @@ fitNB.mme <- function(x) {
   class(fit) <- c("comm.params","nbinom")
   return(fit)
 }
+
+
+#' @export
 
 fitNB.mle <- function(x) {
   x[ rowSums(x)!=0, colSums(x)!=0 ]
@@ -86,6 +94,9 @@ fitNB.mle <- function(x) {
 }
 
 
+#' @export
+
+
 fitPois.mle <- function(x) {
   x[ rowSums(x)!=0, colSums(x)!=0 ]
   fitp <- function(x) {
@@ -97,6 +108,7 @@ fitPois.mle <- function(x) {
   return(fit)
 }
 
+#' @export
 
 # fit normal distribution, for use with clr transformed data
 fitCLR <- function(x) {
@@ -106,7 +118,7 @@ fitCLR <- function(x) {
   return(fitC)
 }
 
-
+#' @export
 
 fitNorm.mle <- function(x) {
   fitN <- function(x) {
@@ -118,6 +130,7 @@ fitNorm.mle <- function(x) {
   return(fit)
 }
 
+#' @export
 
 fitLN.mle <- function(x) {
   x <- x[ rowSums(x)!=0, colSums(x)!=0 ]
@@ -130,6 +143,8 @@ fitLN.mle <- function(x) {
   class(fit) <- c("comm.params","LN")
   return(fit)
 }
+
+#' @export
 
 fitDM <- function(x) {
   x[ rowSums(x)!=0, colSums(x)!=0 ]
@@ -188,6 +203,9 @@ fitDM <- function(x) {
 
 ## Simulate communities using distributions of paramters for NB
 
+
+
+
 simulate_comm_sd <- function(comm_params, samples=100, ids="sim_comm") {
   require(truncnorm)
   test1 <- lapply(seq_along(comm_params), function(i) {
@@ -204,14 +222,21 @@ simulate_comm_sd <- function(comm_params, samples=100, ids="sim_comm") {
 
 # Methods for simulating communities using fitted paramters, or any list of suitable paramaters
 
+#' @export
+
 simulate_comm <- function (x, ...) {
   UseMethod("simulate_comm", x)
 }
 
 
+
 simulate_comm.otu_table <- function(x, ...) {
   return(x[[1]])
 }
+
+
+#' @export
+
 
 simulate_comm.DM <- function(comm_params, samples=100, depth=1000, ids="DM_sim_comm", ...) {
   require(HMP)
@@ -223,6 +248,10 @@ simulate_comm.DM <- function(comm_params, samples=100, depth=1000, ids="DM_sim_c
   row.names(test1.results) <- newnames
   results <- test1.results
 }
+
+
+#' @export
+
 
 simulate_comm.nbinom <- function(comm_params, samples=100, ids="NB_sim_comm", ...) {
   test1 <- lapply(seq_along(comm_params), function(i) {
@@ -237,6 +266,9 @@ simulate_comm.nbinom <- function(comm_params, samples=100, ids="NB_sim_comm", ..
   results <- test1.results
 }
 
+
+#' @export
+
 simulate_comm.Pois <- function(comm_params, samples=100, ids="Pois_sim_comm", ...) {
   test1 <- lapply(seq_along(comm_params), function(i) {
     rpois(samples, lambda=comm_params[[i]][[1]][[1]])
@@ -248,6 +280,9 @@ simulate_comm.Pois <- function(comm_params, samples=100, ids="Pois_sim_comm", ..
   row.names(test1.results) <- newnames
   results <- test1.results
 }
+
+#' @export
+
 
 simulate_comm.LN <- function(comm_params, samples=100, ids="LN_sim_comm", ...) {
   test1 <- lapply(seq_along(comm_params), function(i) {
@@ -264,6 +299,9 @@ simulate_comm.LN <- function(comm_params, samples=100, ids="LN_sim_comm", ...) {
   results <- test1.results
 }
 
+
+#' @export
+
 simulate_comm.Norm <- function(comm_params, samples=100, ids="Norm_sim_comm", ...) {
   test1 <- lapply(seq_along(comm_params), function(i) {
     rnorm(samples, mean=comm_params[[i]][[1]][[1]],
@@ -276,6 +314,9 @@ simulate_comm.Norm <- function(comm_params, samples=100, ids="Norm_sim_comm", ..
   row.names(test1.results) <- newnames
   results <- test1.results
 }
+
+
+#' @export
 
 simulate_comm.CLR <- function(comm_params, samples=100, ids="CLR_sim_comm", ...) {
   test1 <- lapply(seq_along(comm_params), function(i) {

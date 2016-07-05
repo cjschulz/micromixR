@@ -1,5 +1,6 @@
 library(sads)
 
+#' @export
 
 fitsads <- function(x){         #need to generalize, so any dist can be used, i.e.
   x <- x[!x==0]                 # function should accept a list of distribution to fit,
@@ -11,6 +12,7 @@ fitsads <- function(x){         #need to generalize, so any dist can be used, i.
   
 } 
 
+#' @export
 
 AIC.sads <- function(x){
   dat = x
@@ -36,6 +38,7 @@ AIC.sads <- function(x){
   return(mat)
 }  
 
+#' @export
 
 min.AIC <- function(x){
   t(sapply(seq(nrow(x)), function(i) {
@@ -44,6 +47,7 @@ min.AIC <- function(x){
   }))
 }
 
+#' @export
 
 sads.coefs <- function(x){
   dat = x
